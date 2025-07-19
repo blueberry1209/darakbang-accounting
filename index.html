@@ -1397,11 +1397,13 @@
             if (receiptFile) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    // 요청 정보 업데이트
                     request.hasReceipt = true;
                     request.receiptImage = e.target.result;
                     
+                    // 영수증 갤러리에 추가
                     receipts.push({
-                        id: Date.now(),
+                        id: Date.now() + 1, // 다른 ID 사용
                         category: category,
                         description: purpose,
                         amount: amount,
@@ -1410,14 +1412,24 @@
                         personName: personName,
                         isRequest: true
                     });
+                    
+                    // 요청 목록에 추가
+                    expenseRequests.push(request);
+                    updatePendingRequests();
                     updateReceiptGallery();
+                    updateAllDisplays();
+                    
+                    alert('지출 요청이 등록되었습니다! (영수증 포함)');
                 };
                 reader.readAsDataURL(receiptFile);
+            } else {
+                // 영수증 없는 경우
+                expenseRequests.push(request);
+                updatePendingRequests();
+                updateAllDisplays();
+                
+                alert('지출 요청이 등록되었습니다!');
             }
-            
-            expenseRequests.push(request);
-            updatePendingRequests();
-            updateAllDisplays();
             
             // 입력 필드 초기화
             document.getElementById('requestPersonName').value = '';
@@ -1426,8 +1438,6 @@
             document.getElementById('requestContact').value = '';
             document.getElementById('requestAccount').value = '';
             document.getElementById('requestReceiptFile').value = '';
-            
-            alert('지출 요청이 등록되었습니다!');
         }
         
         // 현재 잔액 계산

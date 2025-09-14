@@ -6,7 +6,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>다락방 회계장부</title>
+    <title>다락방 회계</title>
     <style>
         /* 전체 초기화 */
         * {
@@ -20,9 +20,9 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
             background: linear-gradient(135deg, #f8f5f2 0%, #f0ede8 100%);
             line-height: 1.5;
-            font-size: 18px;
+            font-size: 16px;
             color: #3a3a3a;
-            padding-bottom: 80px; /* 하단 네비게이션 공간 */
+            padding-bottom: 80px;
             min-height: 100vh;
         }
 
@@ -124,20 +124,6 @@
             opacity: 0.9;
         }
 
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            min-height: 36px;
-        }
-
         /* 컨테이너 */
         .container {
             padding: 20px;
@@ -206,15 +192,16 @@
         }
 
         .balance-card h4 {
-            font-size: 16px;
+            font-size: 14px;
             margin-bottom: 8px;
             opacity: 0.9;
             font-weight: 500;
         }
 
         .balance-card .amount {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
+            line-height: 1.2;
         }
 
         /* 폼 그룹 */
@@ -227,7 +214,7 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: #6b5b4f;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .form-group input,
@@ -237,7 +224,7 @@
             padding: 16px 20px;
             border: 2px solid #d4c4b4;
             border-radius: 12px;
-            font-size: 18px;
+            font-size: 16px;
             background: rgba(255, 255, 255, 0.9);
             transition: all 0.3s ease;
             min-height: 56px;
@@ -258,7 +245,7 @@
             padding: 18px 20px;
             border: none;
             border-radius: 12px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -299,7 +286,7 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
-        /* 거래 내역 테이블 */
+        /* 거래 내역 스타일 */
         .transaction-list {
             margin-top: 20px;
         }
@@ -329,13 +316,13 @@
         }
 
         .transaction-date {
-            font-size: 16px;
+            font-size: 14px;
             color: #666;
             font-weight: 500;
         }
 
         .transaction-type {
-            font-size: 14px;
+            font-size: 12px;
             padding: 4px 8px;
             border-radius: 20px;
             font-weight: 600;
@@ -358,12 +345,12 @@
         .transaction-category {
             font-weight: 600;
             color: #6b5b4f;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .transaction-description {
             color: #666;
-            font-size: 16px;
+            font-size: 14px;
             margin-top: 4px;
         }
 
@@ -375,7 +362,7 @@
 
         .transaction-amount {
             font-weight: 700;
-            font-size: 20px;
+            font-size: 16px;
         }
 
         .transaction-amount.income {
@@ -387,7 +374,7 @@
         }
 
         .transaction-balance {
-            font-size: 16px;
+            font-size: 14px;
             color: #666;
         }
 
@@ -398,7 +385,7 @@
             padding: 8px 12px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             min-height: 36px;
             min-width: 36px;
         }
@@ -408,7 +395,7 @@
             padding: 16px 20px;
             border-radius: 12px;
             margin-bottom: 20px;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.5;
         }
 
@@ -433,7 +420,7 @@
 
         .nav-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             max-width: 500px;
             margin: 0 auto;
         }
@@ -458,12 +445,12 @@
         }
 
         .nav-icon {
-            font-size: 24px;
+            font-size: 20px;
             margin-bottom: 4px;
         }
 
         .nav-label {
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 600;
         }
 
@@ -480,7 +467,7 @@
             background: rgba(164, 144, 128, 0.1);
             border: 1px solid #d4c4b4;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             color: #6b5b4f;
             cursor: pointer;
@@ -507,18 +494,18 @@
         }
 
         .stats-label {
-            font-size: 16px;
+            font-size: 14px;
             color: #666;
             margin-bottom: 4px;
         }
 
         .stats-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: #6b5b4f;
         }
 
-        /* 보고서 테이블 */
+        /* 보고서 관련 */
         .report-table {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
@@ -534,10 +521,10 @@
 
         .report-table th,
         .report-table td {
-            padding: 16px 12px;
+            padding: 12px 10px;
             text-align: left;
             border-bottom: 1px solid #f0f0f0;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .report-table th {
@@ -546,7 +533,16 @@
             color: #6b5b4f;
         }
 
-        /* 설정 화면 특별 스타일 */
+        /* 보고서 캡처 영역 */
+        .report-capture {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 설정 화면 */
         .settings-current {
             background: rgba(255, 255, 255, 0.8);
             border-radius: 12px;
@@ -556,7 +552,7 @@
 
         .settings-current p {
             margin-bottom: 12px;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.6;
         }
 
@@ -569,6 +565,21 @@
         .settings-actions .btn {
             flex: 1;
             margin-bottom: 0;
+        }
+
+        /* 로그아웃 버튼을 설정 카드 안에 배치 */
+        .logout-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .logout-section h4 {
+            color: #6b5b4f;
+            margin-bottom: 10px;
+            font-size: 16px;
         }
 
         /* 반응형 조정 */
@@ -589,21 +600,18 @@
             .settings-actions .btn {
                 flex: none;
             }
-        }
 
-        /* 로딩 상태 */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
+            .nav-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            .nav-icon {
+                font-size: 18px;
+            }
+
+            .nav-label {
+                font-size: 9px;
+            }
         }
 
         /* 접근성 개선 */
@@ -632,7 +640,7 @@
     <!-- 로그인 화면 -->
     <div id="loginScreen" class="login-container">
         <div class="login-form">
-            <h1>다락방 회계장부</h1>
+            <h1>다락방 회계</h1>
             <p>비밀번호를 입력해주세요</p>
             <input type="password" id="passwordInput" placeholder="비밀번호 입력" onkeypress="checkEnterKey(event)">
             <button onclick="login()">로그인</button>
@@ -646,7 +654,6 @@
     <div id="mainApp" class="main-app">
         <!-- 헤더 -->
         <div class="header">
-            <button class="logout-btn" onclick="logout()">로그아웃</button>
             <h1><span id="headerDarakbangName">다락방</span> 회계장부</h1>
             <p>투명한 회계 관리</p>
         </div>
@@ -700,6 +707,12 @@
                             <button onclick="resetAllData()" class="btn btn-danger">전체 초기화</button>
                         </div>
                     </div>
+                </div>
+
+                <!-- 로그아웃 섹션을 설정 페이지에 배치 -->
+                <div class="logout-section">
+                    <h4>계정 관리</h4>
+                    <button onclick="logout()" class="btn btn-warning">로그아웃</button>
                 </div>
             </div>
 
@@ -834,8 +847,10 @@
                     <button onclick="generateReport()" class="btn btn-primary">보고서 생성</button>
                 </div>
 
-                <div class="card">
-                    <div style="text-align: center; margin-bottom: 20px;">
+                <!-- 보고서 캡처 영역 -->
+                <div class="report-capture" id="reportCapture">
+                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px;">
+                        <h3 style="color: #6b5b4f; margin-bottom: 10px;">회계 보고서</h3>
                         <p><strong>다락방:</strong> <span id="reportDarakbangName">-</span></p>
                         <p><strong>기간:</strong> <span id="reportPeriod">전체 기간</span></p>
                         <p><strong>담당자:</strong> <span id="reportManager">-</span> | <strong>작성일:</strong> <span id="reportDate">-</span></p>
@@ -846,13 +861,17 @@
                             <thead>
                                 <tr>
                                     <th>항목</th>
-                                    <th>금액</th>
+                                    <th style="text-align: right;">금액</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
                     </div>
+                </div>
+
+                <div class="card">
+                    <button onclick="captureReport()" class="btn btn-success">보고서 이미지로 저장</button>
                 </div>
             </div>
         </div>
@@ -876,9 +895,16 @@
                     <div class="nav-icon">📋</div>
                     <div class="nav-label">내역</div>
                 </div>
+                <div class="nav-item" onclick="showSection('report')">
+                    <div class="nav-icon">📄</div>
+                    <div class="nav-label">보고서</div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- HTML2Canvas 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
         // 전역 변수
@@ -1393,12 +1419,46 @@
             const tbody = document.querySelector('#consolidatedReport tbody');
             tbody.innerHTML = `
                 <tr style="background: #f8f5f2;"><td colspan="2"><strong>수입 요약</strong></td></tr>
-                <tr><td>기간 시작 잔액</td><td>${periodStartBalance.toLocaleString()}원</td></tr>
-                <tr><td>기간 내 총 수입</td><td style="color: #5a6b5a; font-weight: 600;">+${totalIncomeInPeriod.toLocaleString()}원</td></tr>
+                <tr><td>기간 시작 잔액</td><td style="text-align: right;">${periodStartBalance.toLocaleString()}원</td></tr>
+                <tr><td>기간 내 총 수입</td><td style="color: #5a6b5a; font-weight: 600; text-align: right;">+${totalIncomeInPeriod.toLocaleString()}원</td></tr>
                 <tr style="background: #f8f5f2;"><td colspan="2"><strong>지출 요약</strong></td></tr>
-                <tr><td>기간 내 총 지출</td><td style="color: #6b5a5a; font-weight: 600;">-${totalExpenseInPeriod.toLocaleString()}원</td></tr>
-                <tr style="background: #f0ede8; font-weight: 600;"><td><strong>기간 종료 잔액</strong></td><td><strong>${periodEndBalance.toLocaleString()}원</strong></td></tr>
+                <tr><td>기간 내 총 지출</td><td style="color: #6b5a5a; font-weight: 600; text-align: right;">-${totalExpenseInPeriod.toLocaleString()}원</td></tr>
+                <tr style="background: #f0ede8; font-weight: 600;"><td><strong>기간 종료 잔액</strong></td><td style="text-align: right;"><strong>${periodEndBalance.toLocaleString()}원</strong></td></tr>
             `;
+        }
+
+        // 보고서 이미지 캡처 및 저장
+        function captureReport() {
+            if (!window.html2canvas) {
+                showAlert('이미지 저장 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+                return;
+            }
+
+            const captureElement = document.getElementById('reportCapture');
+            
+            showAlert('보고서를 이미지로 변환 중입니다...');
+            
+            html2canvas(captureElement, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                useCORS: true,
+                allowTaint: true
+            }).then(function(canvas) {
+                // 이미지를 다운로드 가능한 링크로 변환
+                const link = document.createElement('a');
+                link.download = `다락방_회계보고서_${new Date().toISOString().split('T')[0]}.png`;
+                link.href = canvas.toDataURL();
+                
+                // 자동 다운로드 실행
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showAlert('보고서 이미지가 저장되었습니다!');
+            }).catch(function(error) {
+                console.error('이미지 저장 오류:', error);
+                showAlert('이미지 저장 중 오류가 발생했습니다.');
+            });
         }
 
         // 알림 표시

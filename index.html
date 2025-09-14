@@ -6,7 +6,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>다락방 회계</title>
+    <title>주님의교회 다락방 회계앱</title>
     <style>
         /* 전체 초기화 */
         * {
@@ -46,11 +46,40 @@
             max-width: 400px;
         }
 
+        /* 교회 로고 스타일 */
+        .church-logo {
+            width: 80px;
+            height: 60px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-blocks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 3px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-block {
+            border-radius: 4px;
+        }
+
+        .logo-block:nth-child(1) { background: #d4a5a0; }
+        .logo-block:nth-child(2) { background: #c8a048; }
+        .logo-block:nth-child(3) { background: #c8743a; }
+        .logo-block:nth-child(4) { background: #4a7c59; }
+
         .login-form h1 {
             color: #6b5b4f;
             margin-bottom: 15px;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
+            line-height: 1.4;
         }
 
         .login-form p {
@@ -454,32 +483,6 @@
             font-weight: 600;
         }
 
-        /* 빠른 입력 버튼들 */
-        .amount-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 16px 0;
-        }
-
-        .amount-btn {
-            padding: 12px;
-            background: rgba(164, 144, 128, 0.1);
-            border: 1px solid #d4c4b4;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #6b5b4f;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-height: 48px;
-        }
-
-        .amount-btn:hover, .amount-btn:active {
-            background: rgba(164, 144, 128, 0.2);
-            border-color: #8a7a6e;
-        }
-
         /* 대시보드 통계 */
         .stats-card {
             background: rgba(255, 255, 255, 0.9);
@@ -640,7 +643,15 @@
     <!-- 로그인 화면 -->
     <div id="loginScreen" class="login-container">
         <div class="login-form">
-            <h1>다락방 회계</h1>
+            <div class="church-logo">
+                <div class="logo-blocks">
+                    <div class="logo-block"></div>
+                    <div class="logo-block"></div>
+                    <div class="logo-block"></div>
+                    <div class="logo-block"></div>
+                </div>
+            </div>
+            <h1>주님의교회<br>다락방 회계앱</h1>
             <p>비밀번호를 입력해주세요</p>
             <input type="password" id="passwordInput" placeholder="비밀번호 입력" onkeypress="checkEnterKey(event)">
             <button onclick="login()">로그인</button>
@@ -655,7 +666,7 @@
         <!-- 헤더 -->
         <div class="header">
             <h1><span id="headerDarakbangName">다락방</span> 회계장부</h1>
-            <p>투명한 회계 관리</p>
+            <p>함께 지어져가는 주님의교회</p>
         </div>
 
         <div class="container">
@@ -764,11 +775,6 @@
                     <div class="form-group">
                         <label>입금액</label>
                         <input type="number" id="incomeAmount" placeholder="금액 입력">
-                        <div class="amount-buttons">
-                            <button class="amount-btn" onclick="setAmount('income', 10000)">1만원</button>
-                            <button class="amount-btn" onclick="setAmount('income', 50000)">5만원</button>
-                            <button class="amount-btn" onclick="setAmount('income', 100000)">10만원</button>
-                        </div>
                     </div>
                     <div class="form-group">
                         <label>입금 내역</label>
@@ -796,11 +802,6 @@
                     <div class="form-group">
                         <label>출금액</label>
                         <input type="number" id="expenseAmount" placeholder="금액 입력">
-                        <div class="amount-buttons">
-                            <button class="amount-btn" onclick="setAmount('expense', 10000)">1만원</button>
-                            <button class="amount-btn" onclick="setAmount('expense', 50000)">5만원</button>
-                            <button class="amount-btn" onclick="setAmount('expense', 100000)">10만원</button>
-                        </div>
                     </div>
                     <div class="form-group">
                         <label>출금 내역</label>
@@ -852,8 +853,9 @@
                     <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px;">
                         <h3 style="color: #6b5b4f; margin-bottom: 10px;">회계 보고서</h3>
                         <p><strong>다락방:</strong> <span id="reportDarakbangName">-</span></p>
-                        <p><strong>기간:</strong> <span id="reportPeriod">전체 기간</span></p>
-                        <p><strong>담당자:</strong> <span id="reportManager">-</span> | <strong>작성일:</strong> <span id="reportDate">-</span></p>
+                        <p><strong>보고서 기간:</strong> <span id="reportPeriod">전체</span></p>
+                        <p><strong>담당자:</strong> <span id="reportManager">-</span></p>
+                        <p><strong>작성일:</strong> <span id="reportDate">-</span></p>
                     </div>
 
                     <div class="report-table">
@@ -1146,13 +1148,6 @@
             }
         }
 
-        // 빠른 금액 입력
-        function setAmount(type, amount) {
-            const input = document.getElementById(type + 'Amount');
-            input.value = amount;
-            input.focus();
-        }
-
         // 거래 등록
         function addTransaction(type) {
             if (!settings.isSetup) {
@@ -1352,7 +1347,7 @@
             }
         }
 
-        // 보고서 생성
+        // 보고서 생성 (수정된 부분)
         function generateReport() {
             const startDate = document.getElementById('reportStartDate').value;
             const endDate = document.getElementById('reportEndDate').value;
@@ -1402,11 +1397,28 @@
             const totalExpenseInPeriod = filteredTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
             const periodEndBalance = periodStartBalance + totalIncomeInPeriod - totalExpenseInPeriod;
 
+            // 카테고리별 집계
+            const incomeByCategory = {
+                '다락방 헌금': 0, '모임비': 0, '후원금': 0, '이자수입': 0, '기타수입': 0
+            };
+
+            const expenseByCategory = {
+                '다락방 헌금': 0, '식사비': 0, '열린 다락방 모임비': 0, '선물비': 0, '행사비': 0, '기타지출': 0
+            };
+
+            filteredTransactions.forEach(transaction => {
+                if (transaction.type === 'income' && incomeByCategory.hasOwnProperty(transaction.category)) {
+                    incomeByCategory[transaction.category] += transaction.amount;
+                } else if (transaction.type === 'expense' && expenseByCategory.hasOwnProperty(transaction.category)) {
+                    expenseByCategory[transaction.category] += transaction.amount;
+                }
+            });
+
             document.getElementById('reportDate').textContent = new Date().toLocaleDateString('ko-KR');
             document.getElementById('reportDarakbangName').textContent = settings.darakbangName || '-';
             document.getElementById('reportManager').textContent = settings.managerName || '-';
 
-            let periodText = '전체 기간';
+            let periodText = '전체';
             if (startDate && endDate) {
                 periodText = `${startDate} ~ ${endDate}`;
             } else if (startDate) {
@@ -1417,14 +1429,33 @@
             document.getElementById('reportPeriod').textContent = periodText;
 
             const tbody = document.querySelector('#consolidatedReport tbody');
-            tbody.innerHTML = `
-                <tr style="background: #f8f5f2;"><td colspan="2"><strong>수입 요약</strong></td></tr>
-                <tr><td>기간 시작 잔액</td><td style="text-align: right;">${periodStartBalance.toLocaleString()}원</td></tr>
-                <tr><td>기간 내 총 수입</td><td style="color: #5a6b5a; font-weight: 600; text-align: right;">+${totalIncomeInPeriod.toLocaleString()}원</td></tr>
-                <tr style="background: #f8f5f2;"><td colspan="2"><strong>지출 요약</strong></td></tr>
-                <tr><td>기간 내 총 지출</td><td style="color: #6b5a5a; font-weight: 600; text-align: right;">-${totalExpenseInPeriod.toLocaleString()}원</td></tr>
-                <tr style="background: #f0ede8; font-weight: 600;"><td><strong>기간 종료 잔액</strong></td><td style="text-align: right;"><strong>${periodEndBalance.toLocaleString()}원</strong></td></tr>
-            `;
+            tbody.innerHTML = '';
+
+            // 수입 요약
+            tbody.innerHTML += `<tr style="background: #f8f5f2;"><td colspan="2"><strong>수입 요약</strong></td></tr>`;
+            tbody.innerHTML += `<tr><td>이월 잔고</td><td style="text-align: right;">${periodStartBalance.toLocaleString()}원</td></tr>`;
+            
+            // 수입 카테고리별 표시
+            for (const category in incomeByCategory) {
+                if (incomeByCategory[category] > 0) {
+                    tbody.innerHTML += `<tr><td>${category}</td><td style="color: #5a6b5a; font-weight: 600; text-align: right;">+${incomeByCategory[category].toLocaleString()}원</td></tr>`;
+                }
+            }
+            tbody.innerHTML += `<tr><td><strong>총 수입</strong></td><td style="color: #5a6b5a; font-weight: 600; text-align: right;"><strong>+${totalIncomeInPeriod.toLocaleString()}원</strong></td></tr>`;
+
+            // 지출 요약
+            tbody.innerHTML += `<tr style="background: #f8f5f2;"><td colspan="2"><strong>지출 요약</strong></td></tr>`;
+            
+            // 지출 카테고리별 표시
+            for (const category in expenseByCategory) {
+                if (expenseByCategory[category] > 0) {
+                    tbody.innerHTML += `<tr><td>${category}</td><td style="color: #6b5a5a; font-weight: 600; text-align: right;">-${expenseByCategory[category].toLocaleString()}원</td></tr>`;
+                }
+            }
+            tbody.innerHTML += `<tr><td><strong>총 지출</strong></td><td style="color: #6b5a5a; font-weight: 600; text-align: right;"><strong>-${totalExpenseInPeriod.toLocaleString()}원</strong></td></tr>`;
+
+            // 최종 잔액
+            tbody.innerHTML += `<tr style="background: #f0ede8; font-weight: 600;"><td><strong>종료 잔액</strong></td><td style="text-align: right;"><strong>${periodEndBalance.toLocaleString()}원</strong></td></tr>`;
         }
 
         // 보고서 이미지 캡처 및 저장

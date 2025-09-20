@@ -46,34 +46,6 @@
             max-width: 400px;
         }
 
-        /* 교회 로고 스타일 */
-        .church-logo {
-            width: 80px;
-            height: 60px;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-blocks {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 3px;
-            width: 40px;
-            height: 40px;
-        }
-
-        .logo-block {
-            border-radius: 4px;
-        }
-
-        .logo-block:nth-child(1) { background: #d4a5a0; }
-        .logo-block:nth-child(2) { background: #c8a048; }
-        .logo-block:nth-child(3) { background: #c8743a; }
-        .logo-block:nth-child(4) { background: #4a7c59; }
-
         .login-form h1 {
             color: #6b5b4f;
             margin-bottom: 15px;
@@ -143,7 +115,7 @@
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
             margin-bottom: 5px;
         }
@@ -385,8 +357,8 @@
 
         .transaction-amounts {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .transaction-amount {
@@ -400,6 +372,12 @@
 
         .transaction-amount.expense {
             color: #6b5a5a;
+        }
+
+        .transaction-balance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .transaction-balance {
@@ -432,6 +410,12 @@
             background: #f5f2f0;
             border: 2px solid #d4c4b4;
             color: #6b5b4f;
+        }
+
+        .alert-info {
+            background: #f0f8ff;
+            border: 2px solid #b3d9ff;
+            color: #2c5aa0;
         }
 
         /* 하단 네비게이션 */
@@ -527,7 +511,7 @@
             padding: 12px 10px;
             text-align: left;
             border-bottom: 1px solid #f0f0f0;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .report-table th {
@@ -543,6 +527,11 @@
             padding: 20px;
             margin: 20px 0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 기간 종료 잔액 금액 크기 조정 */
+        .final-balance {
+            font-size: 13px !important;
         }
 
         /* 설정 화면 */
@@ -583,6 +572,15 @@
             color: #6b5b4f;
             margin-bottom: 10px;
             font-size: 16px;
+        }
+
+        /* 보고서 결과 숨김/표시 */
+        .report-result {
+            display: none;
+        }
+
+        .report-result.show {
+            display: block;
         }
 
         /* 반응형 조정 */
@@ -643,14 +641,6 @@
     <!-- 로그인 화면 -->
     <div id="loginScreen" class="login-container">
         <div class="login-form">
-            <div class="church-logo">
-                <div class="logo-blocks">
-                    <div class="logo-block"></div>
-                    <div class="logo-block"></div>
-                    <div class="logo-block"></div>
-                    <div class="logo-block"></div>
-                </div>
-            </div>
             <h1>주님의교회<br>다락방 회계앱</h1>
             <p>비밀번호를 입력해주세요</p>
             <input type="password" id="passwordInput" placeholder="비밀번호 입력" onkeypress="checkEnterKey(event)">
@@ -665,7 +655,7 @@
     <div id="mainApp" class="main-app">
         <!-- 헤더 -->
         <div class="header">
-            <h1><span id="headerDarakbangName">다락방</span> 회계장부</h1>
+            <h1><span id="headerDarakbangName">다락방</span> 회계앱</h1>
             <p>함께 지어져가는 주님의교회</p>
         </div>
 
@@ -837,6 +827,10 @@
                 <div class="card">
                     <h2>회계 보고서</h2>
                     
+                    <div class="alert alert-info">
+                        <strong>안내:</strong> 기간을 선택하고 보고서 생성 버튼을 눌러주세요. 기간을 선택하지 않으면 전체 기간 보고서가 생성됩니다.
+                    </div>
+                    
                     <div class="form-group">
                         <label>시작 날짜</label>
                         <input type="date" id="reportStartDate">
@@ -848,32 +842,35 @@
                     <button onclick="generateReport()" class="btn btn-primary">보고서 생성</button>
                 </div>
 
-                <!-- 보고서 캡처 영역 -->
-                <div class="report-capture" id="reportCapture">
-                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px;">
-                        <h3 style="color: #6b5b4f; margin-bottom: 10px;">회계 보고서</h3>
-                        <p><strong>다락방:</strong> <span id="reportDarakbangName">-</span></p>
-                        <p><strong>보고서 기간:</strong> <span id="reportPeriod">전체</span></p>
-                        <p><strong>담당자:</strong> <span id="reportManager">-</span></p>
-                        <p><strong>작성일:</strong> <span id="reportDate">-</span></p>
+                <!-- 보고서 결과 영역 -->
+                <div class="report-result" id="reportResult">
+                    <!-- 보고서 캡처 영역 -->
+                    <div class="report-capture" id="reportCapture">
+                        <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px;">
+                            <h3 style="color: #6b5b4f; margin-bottom: 10px;">회계 보고서</h3>
+                            <p><strong>다락방:</strong> <span id="reportDarakbangName">-</span></p>
+                            <p><strong>보고서 기간:</strong> <span id="reportPeriod">전체</span></p>
+                            <p><strong>담당자:</strong> <span id="reportManager">-</span></p>
+                            <p><strong>작성일:</strong> <span id="reportDate">-</span></p>
+                        </div>
+
+                        <div class="report-table">
+                            <table id="consolidatedReport">
+                                <thead>
+                                    <tr>
+                                        <th>항목</th>
+                                        <th style="text-align: right;">금액</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <div class="report-table">
-                        <table id="consolidatedReport">
-                            <thead>
-                                <tr>
-                                    <th>항목</th>
-                                    <th style="text-align: right;">금액</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                    <div class="card">
+                        <button onclick="captureReport()" class="btn btn-success">보고서 이미지로 저장</button>
                     </div>
-                </div>
-
-                <div class="card">
-                    <button onclick="captureReport()" class="btn btn-success">보고서 이미지로 저장</button>
                 </div>
             </div>
         </div>
@@ -973,7 +970,7 @@
                 setTodayAsDefault();
                 updateAllDisplays();
                 updateHeaderDarakbangName();
-                generateReport();
+                // 로그인 시에는 보고서를 자동 생성하지 않음
             } else {
                 showAlert('비밀번호가 올바르지 않습니다.');
                 document.getElementById('passwordInput').value = '';
@@ -1047,7 +1044,6 @@
             updateSettingsDisplay();
             updateAllDisplays();
             updateHeaderDarakbangName();
-            generateReport();
             saveData();
             showAlert('설정이 저장되었습니다!');
             document.getElementById('newPassword').value = '';
@@ -1103,10 +1099,12 @@
                     document.getElementById('setupForm').style.display = 'block';
                     document.getElementById('currentSettings').style.display = 'none';
                     
+                    // 보고서 결과 숨기기
+                    document.getElementById('reportResult').classList.remove('show');
+                    
                     setTodayAsDefault();
                     updateAllDisplays();
                     updateHeaderDarakbangName();
-                    generateReport();
                     saveData();
                     showAlert('모든 데이터가 초기화되었습니다.');
                 }
@@ -1117,7 +1115,7 @@
             updateSettingsDisplay();
         }
 
-        // 섹션 전환
+        // 섹션 전환 (수정됨: 보고서 자동 생성 제거)
         function showSection(sectionName) {
             if (!settings.isSetup && sectionName !== 'setup') {
                 showAlert('먼저 초기 설정을 완료해주세요.');
@@ -1143,8 +1141,9 @@
                 activeNavItem.classList.add('active');
             }
 
+            // 보고서 섹션일 때 보고서 결과 숨기기
             if (sectionName === 'report') {
-                generateReport();
+                document.getElementById('reportResult').classList.remove('show');
             }
         }
 
@@ -1212,7 +1211,6 @@
 
             transactions.push(transaction);
             updateAllDisplays();
-            generateReport();
             saveData();
             showAlert(type === 'income' ? '입금이 등록되었습니다!' : '출금이 등록되었습니다!');
         }
@@ -1225,7 +1223,6 @@
                 transactions.splice(index, 1);
                 recalculateBalances();
                 updateAllDisplays();
-                generateReport();
                 saveData();
                 showAlert('거래가 삭제되었습니다.');
             }
@@ -1295,8 +1292,28 @@
 
             container.innerHTML = '';
 
-            // 최신순 정렬
-            allTransactions.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+            // 이월 잔고 항목을 먼저 추가 (맨 위에)
+            if (settings.isSetup) {
+                const carryOverItem = document.createElement('div');
+                carryOverItem.className = 'transaction-item';
+                carryOverItem.innerHTML = `
+                    <div class="transaction-header">
+                        <div class="transaction-date">${settings.baseDate || '-'}</div>
+                        <div class="transaction-type">이월</div>
+                    </div>
+                    <div class="transaction-info">
+                        <div class="transaction-category">이월 잔고</div>
+                    </div>
+                    <div class="transaction-amounts">
+                        <div class="transaction-amount income">+${settings.carryOverBalance.toLocaleString()}원</div>
+                        <div class="transaction-balance">잔액: ${settings.carryOverBalance.toLocaleString()}원</div>
+                    </div>
+                `;
+                container.appendChild(carryOverItem);
+            }
+
+            // 시간순 정렬 (오래된 순서부터 = 최신이 아래로)
+            allTransactions.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
 
             allTransactions.forEach(transaction => {
                 const item = document.createElement('div');
@@ -1317,7 +1334,7 @@
                         <div class="transaction-amount ${transaction.type}">
                             ${transaction.type === 'income' ? '+' : '-'}${transaction.amount.toLocaleString()}원
                         </div>
-                        <div>
+                        <div class="transaction-balance-row">
                             <div class="transaction-balance">잔액: ${transaction.balance.toLocaleString()}원</div>
                             <button class="delete-btn" onclick="deleteTransaction(${transaction.id})">삭제</button>
                         </div>
@@ -1325,64 +1342,40 @@
                 `;
                 container.appendChild(item);
             });
-
-            // 이월 잔고 항목 추가
-            if (settings.isSetup) {
-                const carryOverItem = document.createElement('div');
-                carryOverItem.className = 'transaction-item';
-                carryOverItem.innerHTML = `
-                    <div class="transaction-header">
-                        <div class="transaction-date">${settings.baseDate || '-'}</div>
-                        <div class="transaction-type">이월</div>
-                    </div>
-                    <div class="transaction-info">
-                        <div class="transaction-category">이월 잔고</div>
-                    </div>
-                    <div class="transaction-amounts">
-                        <div class="transaction-amount income">+${settings.carryOverBalance.toLocaleString()}원</div>
-                        <div class="transaction-balance">잔액: ${settings.carryOverBalance.toLocaleString()}원</div>
-                    </div>
-                `;
-                container.appendChild(carryOverItem);
-            }
         }
 
-        // 보고서 생성 (수정된 부분)
+        // 보고서 생성 (수정됨: 버튼 클릭 시에만 실행)
         function generateReport() {
+            if (!settings.isSetup) {
+                showAlert('먼저 초기 설정을 완료해주세요.');
+                return;
+            }
+
             const startDate = document.getElementById('reportStartDate').value;
             const endDate = document.getElementById('reportEndDate').value;
 
             let filteredTransactions = transactions;
 
+            // 날짜 필터링 로직 수정
             if (startDate && endDate) {
                 filteredTransactions = transactions.filter(transaction => {
-                    const transactionDateTime = new Date(transaction.dateTime);
-                    const start = new Date(startDate);
-                    const end = new Date(endDate);
-                    end.setHours(23, 59, 59, 999);
-                    return transactionDateTime >= start && transactionDateTime <= end;
+                    const transactionDate = transaction.date;
+                    return transactionDate >= startDate && transactionDate <= endDate;
                 });
             } else if (startDate) {
                 filteredTransactions = transactions.filter(transaction => {
-                    const transactionDateTime = new Date(transaction.dateTime);
-                    const start = new Date(startDate);
-                    return transactionDateTime >= start;
+                    return transaction.date >= startDate;
                 });
             } else if (endDate) {
                 filteredTransactions = transactions.filter(transaction => {
-                    const transactionDateTime = new Date(transaction.dateTime);
-                    const end = new Date(endDate);
-                    end.setHours(23, 59, 59, 999);
-                    return transactionDateTime <= end;
+                    return transaction.date <= endDate;
                 });
             }
 
             let periodStartBalance = settings.carryOverBalance;
             if (startDate) {
                 const beforeStartTransactions = transactions.filter(transaction => {
-                    const transactionDateTime = new Date(transaction.dateTime);
-                    const start = new Date(startDate);
-                    return transactionDateTime < start;
+                    return transaction.date < startDate;
                 });
                 beforeStartTransactions.forEach(transaction => {
                     if (transaction.type === 'income') {
@@ -1397,7 +1390,7 @@
             const totalExpenseInPeriod = filteredTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
             const periodEndBalance = periodStartBalance + totalIncomeInPeriod - totalExpenseInPeriod;
 
-            // 카테고리별 집계
+            // 카테고리별 집계 - 모든 카테고리 표시
             const incomeByCategory = {
                 '다락방 헌금': 0, '모임비': 0, '후원금': 0, '이자수입': 0, '기타수입': 0
             };
@@ -1431,31 +1424,35 @@
             const tbody = document.querySelector('#consolidatedReport tbody');
             tbody.innerHTML = '';
 
-            // 수입 요약
-            tbody.innerHTML += `<tr style="background: #f8f5f2;"><td colspan="2"><strong>수입 요약</strong></td></tr>`;
+            // 수입 내역 요약
+            tbody.innerHTML += `<tr style="background: #f8f5f2;"><td colspan="2"><strong>수입 내역 요약</strong></td></tr>`;
             tbody.innerHTML += `<tr><td>이월 잔고</td><td style="text-align: right;">${periodStartBalance.toLocaleString()}원</td></tr>`;
             
-            // 수입 카테고리별 표시
+            // 모든 수입 카테고리 표시 (0원도 표시)
             for (const category in incomeByCategory) {
-                if (incomeByCategory[category] > 0) {
-                    tbody.innerHTML += `<tr><td>${category}</td><td style="color: #5a6b5a; font-weight: 600; text-align: right;">+${incomeByCategory[category].toLocaleString()}원</td></tr>`;
-                }
+                tbody.innerHTML += `<tr><td>${category}</td><td style="color: #5a6b5a; font-weight: 600; text-align: right;">${incomeByCategory[category].toLocaleString()}원</td></tr>`;
             }
-            tbody.innerHTML += `<tr><td><strong>총 수입</strong></td><td style="color: #5a6b5a; font-weight: 600; text-align: right;"><strong>+${totalIncomeInPeriod.toLocaleString()}원</strong></td></tr>`;
+            tbody.innerHTML += `<tr style="background: #e8f5e8;"><td><strong>총 수입</strong></td><td style="color: #5a6b5a; font-weight: 700; text-align: right;"><strong>${(periodStartBalance + totalIncomeInPeriod).toLocaleString()}원</strong></td></tr>`;
 
-            // 지출 요약
-            tbody.innerHTML += `<tr style="background: #f8f5f2;"><td colspan="2"><strong>지출 요약</strong></td></tr>`;
+            // 지출 내역 요약
+            tbody.innerHTML += `<tr style="background: #f8f5f2;"><td colspan="2"><strong>지출 내역 요약</strong></td></tr>`;
             
-            // 지출 카테고리별 표시
+            // 모든 지출 카테고리 표시 (0원도 표시)
             for (const category in expenseByCategory) {
-                if (expenseByCategory[category] > 0) {
-                    tbody.innerHTML += `<tr><td>${category}</td><td style="color: #6b5a5a; font-weight: 600; text-align: right;">-${expenseByCategory[category].toLocaleString()}원</td></tr>`;
-                }
+                tbody.innerHTML += `<tr><td>${category}</td><td style="color: #6b5a5a; font-weight: 600; text-align: right;">${expenseByCategory[category].toLocaleString()}원</td></tr>`;
             }
-            tbody.innerHTML += `<tr><td><strong>총 지출</strong></td><td style="color: #6b5a5a; font-weight: 600; text-align: right;"><strong>-${totalExpenseInPeriod.toLocaleString()}원</strong></td></tr>`;
+            tbody.innerHTML += `<tr style="background: #f5e8e8;"><td><strong>총 지출</strong></td><td style="color: #6b5a5a; font-weight: 700; text-align: right;"><strong>${totalExpenseInPeriod.toLocaleString()}원</strong></td></tr>`;
 
-            // 최종 잔액
-            tbody.innerHTML += `<tr style="background: #f0ede8; font-weight: 600;"><td><strong>종료 잔액</strong></td><td style="text-align: right;"><strong>${periodEndBalance.toLocaleString()}원</strong></td></tr>`;
+            // 최종 결산
+            tbody.innerHTML += `<tr style="background: #f0f0f0;"><td colspan="2"><strong>최종 결산</strong></td></tr>`;
+            tbody.innerHTML += `<tr><td>기간 시작 잔액</td><td style="text-align: right;">${periodStartBalance.toLocaleString()}원</td></tr>`;
+            tbody.innerHTML += `<tr><td>총 수입</td><td style="color: #5a6b5a; text-align: right;">+${totalIncomeInPeriod.toLocaleString()}원</td></tr>`;
+            tbody.innerHTML += `<tr><td>총 지출</td><td style="color: #6b5a5a; text-align: right;">-${totalExpenseInPeriod.toLocaleString()}원</td></tr>`;
+            tbody.innerHTML += `<tr style="background: #e0e0e0; font-weight: 700;"><td><strong>기간 종료 잔액</strong></td><td style="text-align: right;"><strong class="final-balance">${periodEndBalance.toLocaleString()}원</strong></td></tr>`;
+
+            // 보고서 결과 표시
+            document.getElementById('reportResult').classList.add('show');
+            showAlert('보고서가 생성되었습니다!');
         }
 
         // 보고서 이미지 캡처 및 저장
